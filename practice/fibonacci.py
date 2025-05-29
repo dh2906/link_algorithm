@@ -1,8 +1,13 @@
 import time
+import sys
 
+dp = None
 
 def main():
-    num = 10
+    num = 10000
+
+    global dp
+    dp = [None for _ in range(num + 1)]
 
     start = time.time()
     result1 = iterative_fibonacci(num)
@@ -23,14 +28,30 @@ def main():
     print()
 
 
-def iterative_fibonacci(num):
-    pass # pass 라는 본 라인은 추후 삭제하세요.    
-	
+def iterative_fibonacci(num): # 0번째부터 피보나치가 시작된다 가정
+    if num <= 1:
+        return num
+
+    num1, num2 = 0, 1
+
+    for i in range(2, num + 1):
+        num1, num2 = num2, num1 + num2
+
+    return num2
+
 
 
 def recursive_fibonacci(num):
-    pass # pass 라는 본 라인은 추후 삭제하세요.    
-    # 코딩을 추가하세요.
+    global dp
+
+    if num <= 1:
+        return num
+
+    if dp[num] is None:
+        dp[num] = recursive_fibonacci(num - 1) + recursive_fibonacci(num - 2)
+
+    return dp[num]
+
 
 
 if __name__ == "__main__":

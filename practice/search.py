@@ -3,7 +3,7 @@ import time
 
 
 def main():
-    num = 1_000
+    num = 1_000000
     s = []
 
     for value in range(num):
@@ -43,32 +43,57 @@ def main():
     print("Elapsed Time: {0:0.8f}ms".format((end - start) * 1_000))
     print()
 
-
-def sequential_search(s, key):
+def sequential_search(s, key): # 순차 탐색
     num = len(s)
     location = 0
 
-    # 코딩을 추가하세요.
+    while location < num:
+        if s[location] == key:
+            return location
 
-    return location
+        location += 1
+
+    return -1
 
 
-def binary_search(s, key):
+def binary_search(s, key): # 이진 탐색
     num = len(s)
     low = 0
     high = num - 1
-    location = -1
+
+    while low <= high:
+        location = (high + low) // 2
+
+        if s[location] == key:
+            return location
+
+        elif s[location] < key:
+            low = location + 1
+
+        else:
+            high = location - 1
 
     # 코딩을 추가하세요.
 
-    return location
+    return -1
 
 
-def recursive_binary_search(s, key, low, high):
+def recursive_binary_search(s, key, low, high): # 이진 재귀 탐색
     mid = round((low + high) / 2)
 
     # 코딩을 추가하세요.
 
+    if low > high:
+        return -1
+
+    if s[mid] == key:
+        return mid
+
+    elif s[mid] < key:
+        return recursive_binary_search(s, key, mid + 1, high)
+
+    else:
+        return recursive_binary_search(s, key, low, mid - 1)
 
 if __name__ == "__main__":
     main()

@@ -60,8 +60,15 @@ class DisjointSet:
         xroot = self.find_set(x)
         yroot = self.find_set(y)
 
-        # 이곳에 코딩을 추가하세요. (약 5~7라인)
+        if self.rank[xroot] < self.rank[yroot]:
+            self.parent[xroot] = yroot
 
+        elif self.rank[xroot] < self.rank[xroot]:
+            self.parent[yroot] = xroot
+
+        else:
+            self.parent[yroot] = xroot
+            self.rank[xroot] += 1
 
 class SpanningTree:
     def __init__(self, graph):
@@ -90,14 +97,24 @@ class SpanningTree:
 
         while len(S) != len(self.graph.nodes):
             V_minus_S = self.graph.nodes - S
-            
-	    # 이곳에 코딩을 추가하세요. (약 8~10라인)
+
+            u = self.extract_min(V_minus_S, d)
+
+            S.add(u)
+
+            for v, weight in self.graph.adjacency_list[u].items():
+                if v not in S and weight < d[v]:
+                    d[v] = weight
+                    self.prim_tree[v] = u
 
     def extract_min(self, V_minus_S, d):
         min = sys.maxsize
         selected_node = None
 
-        # 이곳에 코딩을 추가하세요. (약 5~7라인)
+        for node in V_minus_S:
+            if d[node] < min:
+                min = d[node]
+                selected_node = node
 
         return selected_node
 
@@ -110,7 +127,15 @@ class SpanningTree:
         sorted_edges = sorted(self.graph.edges, key=lambda edge: edge[2])
 
         while e < self.graph.num_nodes - 1:
-	    # 이곳에 코딩을 추가하세요. (약 9~11라인)
+            u, v, _ = sorted_edges.pop(0)
+
+            parent_u = ds.find_set(u)
+            parent_v = ds.find_set(v)
+
+            if parent_u != parent_v:
+                self.kruskal_tree.append((u, v))
+                ds.union(u, v)
+                e += 1
 
 
 if __name__ == "__main__":

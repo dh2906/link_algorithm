@@ -57,10 +57,21 @@ class BST(object):
             # 새로운 노드를 위한 올바른 위치까지 순회하여 새로운 노드의 부모 설정
             current_node = self.root
             parent_node_for_new_node = None
-            
-            ################################
-            # [[[[이곳에 코드 추가 (약 10줄)]]] # 
-            ################################
+
+            while current_node is not None:
+                parent_node_for_new_node = current_node
+
+                if key < current_node.key:
+                    current_node = current_node.left
+
+                else:
+                    current_node = current_node.right
+
+            if key < parent_node_for_new_node.key:
+                parent_node_for_new_node.left = new_node
+
+            else:
+                parent_node_for_new_node.right = new_node
 
             # 새로운 노드의 부모 노드 설정
             new_node.parent = parent_node_for_new_node
@@ -97,9 +108,17 @@ class BST(object):
             # 처음에는 smallest_node의 부모는 삭제할 노드 자신
             parent_of_smallest_node = None
 
-            ################################
-            # [[[[이곳에 코드 추가 (약 10줄)]]] # 
-            ################################
+            while smallest_node.left is not None:
+                parent_of_smallest_node = smallest_node
+                smallest_node = smallest_node.left
+
+            node_to_be_deleted.key = smallest_node.key
+
+            if smallest_node == node_to_be_deleted.right:
+                node_to_be_deleted.right = smallest_node.right
+
+            else:
+                parent_of_smallest_node.left = smallest_node.right
 
             del smallest_node
 
@@ -109,16 +128,32 @@ class BST(object):
 if __name__ == "__main__":
     bst = BST()
 
+    bst.tree_insert(55)
+    bst.tree_insert(15)
+    bst.tree_insert(60)
     bst.tree_insert(8)
+    bst.tree_insert(28)
+    bst.tree_insert(90)
     bst.tree_insert(3)
-    bst.tree_insert(1)
-    bst.tree_insert(6)
-    bst.tree_insert(7)
-    bst.tree_insert(10)
-    bst.tree_insert(14)
-    bst.tree_insert(4)
+    bst.tree_insert(48)
+    bst.tree_insert(38)
+    bst.tree_insert(50)
+    bst.tree_insert(33)
+    bst.tree_insert(32)
+    bst.tree_insert(36)
 
+    bst.tree_insert(40)
     bst.print_bst()
+
+    bst.tree_insert(39)
+    bst.print_bst()
+
+    bst.tree_insert(80)
+    bst.print_bst()
+
+    bst.tree_delete(15)
+    bst.print_bst()
+
     print("\nSearch 10:", bst.tree_search(10))
     print("\nSearch 100:", bst.tree_search(100))
 
@@ -141,4 +176,3 @@ if __name__ == "__main__":
     print("\nDelete 8")
     bst.tree_delete(8)
     bst.print_bst()
-

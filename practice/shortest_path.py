@@ -73,13 +73,25 @@ class ShortestPath:
         d[start_node] = 0
 
         while len(S) != len(self.graph.nodes):
-	    # 이곳에 코딩을 추가하세요. (약 8~10라인)
+            V_minus_S = self.graph.nodes - S
+            u = self.extract_min(V_minus_S, d)
+            S.add(u)
+
+            for v in self.graph.adjacency_list.get(u, {}):
+                weight = self.graph.adjacency_list[u][v]
+
+                if d[v] > d[u] + weight:
+                    d[v] = d[u] + weight
+                    self.dijkstra_tree[v] = u
 
     def extract_min(self, V_minus_S, d):
         min = sys.maxsize
         selected_node = None
 
-        # 이곳에 코딩을 추가하세요. (약 5~7라인)
+        for node in V_minus_S:
+            if d[node] < min:
+                min = d[node]
+                selected_node = node
 
         return selected_node
 
@@ -89,14 +101,21 @@ class ShortestPath:
             d[node] = sys.maxsize
         d[start_node] = 0
 
-        # 이곳에 코딩을 추가하세요. (약 5~7라인)
+        for _ in range(len(self.graph.nodes) - 1):
+            for (u, v, weight) in self.graph.edges:
+                if d[u] != sys.maxsize and d[v] > d[u] + weight:
+                    d[v] = d[u] + weight
+                    self.bellman_ford_tree[v] = u
 
         return self.check_negative_cycle(d)
 
     def check_negative_cycle(self, d):
         is_ok = True
 
-        # 이곳에 코딩을 추가하세요. (약 5~7라인)
+        for (u, v, weight) in self.graph.edges:
+            if d[u] != sys.maxsize and d[v] > d[u] + weight:
+                print("음의 사이클 발견! 해 없음")
+                return False
 
         return is_ok
 
@@ -115,7 +134,13 @@ class ShortestPath:
 
                 self.floyd_warshall_p[i][j] = 0
 
-        # 이곳에 코딩을 추가하세요. (약 6~8라인)
+        for k in self.graph.nodes:
+            for i in self.graph.nodes:
+                for j in self.graph.nodes:
+                    if d[i][k] != sys.maxsize and d[k][j] != sys.maxsize:
+                        if d[i][j] > d[i][k] + d[k][j]:
+                            d[i][j] = d[i][k] + d[k][j]
+                            self.floyd_warshall_p[i][j] = k
 
 
 if __name__ == "__main__":
